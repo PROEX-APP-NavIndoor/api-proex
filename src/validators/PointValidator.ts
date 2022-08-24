@@ -20,15 +20,6 @@ class PointValidator {
     });
   }
 
-  readValidation() {
-    return yup.object().shape({
-      map_id: yup
-        .string()
-        .uuid('Id de mapa deve ser do tipo uuid')
-        .optional(),
-    })
-  }
-
   updateValidation() {
     return yup.object().shape({
       id: yup
