@@ -3,6 +3,8 @@ import { Map } from '../entities/Map';
 import { MapRepository } from '../repositories/MapRepository';
 import { Building } from '../entities/Building';
 import { BuildingRepository } from '../repositories/BuildingRepository';
+import { Point } from '../entities/Point';
+import { PointRepository } from '../repositories/PointRepository';
 import { ApiError } from '../exceptions/ApiError';
 import { IMap } from '../interfaces/IMap.interface';
 
@@ -11,9 +13,12 @@ class MapService {
 
   private connectBuilding: Repository<Building>;
 
+  private connectPoint: Repository<Point>;
+
   constructor() {
     this.connectMap = getCustomRepository(MapRepository);
     this.connectBuilding = getCustomRepository(BuildingRepository);
+    this.connectPoint = getCustomRepository(PointRepository)
   }
 
   async create(data: IMap) {
@@ -34,7 +39,7 @@ class MapService {
   }
 
   async read() {
-    const allMaps = await this.connectMap.find({ relations: ['points'] });
+    const allMaps = await this.connectMap.find();
     return allMaps;
   }
 
@@ -43,6 +48,11 @@ class MapService {
     if (!map) {
       throw new ApiError(404, 'Mapa não existe!');
     }
+
+    const mapPoints = await this.connectPoint.find({map_id: id});
+    if(mapPoints)
+      map.points = mapPoints;
+
     return map;
   }
 

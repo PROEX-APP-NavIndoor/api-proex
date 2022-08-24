@@ -39,8 +39,8 @@ class Map {
   @JoinColumn({ name: 'building_id' })
   building: Building;
 
-  @OneToMany(() => Point, points => points.map)
-  points: Point;
+  @OneToMany(() => Point, (point) => point.map)
+  points: Point[];
 
   constructor() {
     if (!this.id) {
