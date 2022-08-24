@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ApiError } from '../exceptions/ApiError';
+import { throwApiError } from '../exceptions/ThrowApiError';
 import { IOrganization } from '../interfaces/IOrganization.interface';
 import { OrganizationService } from '../services/OrganizationService';
 import { OrganizationValidator } from '../validators/OrganizationValidator';
@@ -12,7 +12,7 @@ class OrganizationController {
     try {
       await organizationValidator.createValidation().validate(data, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const organizationService = new OrganizationService();
@@ -33,7 +33,7 @@ class OrganizationController {
     try {
       await organizationValidator.readByIdValidation().validate({ id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const organizationService = new OrganizationService();
@@ -48,7 +48,7 @@ class OrganizationController {
     try {
       await organizationValidator.deleteByIdValidation().validate({ id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const organizationService = new OrganizationService();
@@ -66,7 +66,7 @@ class OrganizationController {
         .updateValidation()
         .validate({ ...data, id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const organizationService = new OrganizationService();

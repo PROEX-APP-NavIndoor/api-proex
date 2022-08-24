@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ApiError } from '../exceptions/ApiError';
+import { throwApiError } from '../exceptions/ThrowApiError';
 import { ForgotService } from '../services/ForgotService';
 import { ForgotValidator } from '../validators/ForgotValidator';
 
@@ -11,7 +11,8 @@ class ForgotPasswordController {
     try {
       await forgotValidator.forgotValidation().validate({ email }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      console.log(error);
+      throwApiError(400, error);
     }
 
     const forgotService = new ForgotService();

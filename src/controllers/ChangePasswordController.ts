@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ApiError } from '../exceptions/ApiError';
+import { throwApiError } from '../exceptions/ThrowApiError';
 import { ChangeService } from '../services/ChangeService';
 import { ChangeValidator } from '../validators/ChangeValidator';
 
@@ -11,7 +11,7 @@ class ChangePasswordController {
     try {
       await changeValidator.changeValidation().validate(request.body, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const changeService = new ChangeService();
