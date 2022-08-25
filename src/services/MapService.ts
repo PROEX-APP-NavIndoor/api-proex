@@ -7,6 +7,8 @@ import { Point } from '../entities/Point';
 import { PointRepository } from '../repositories/PointRepository';
 import { ApiError } from '../exceptions/ApiError';
 import { IMap } from '../interfaces/IMap.interface';
+import { IMapResponse } from '../interfaces/IMapResponse.interface'
+import { pointToData } from './PointService'
 
 class MapService {
   private connectMap: Repository<Map>;
@@ -44,14 +46,14 @@ class MapService {
   }
 
   async readById(id: string) {
-    const map = await this.connectMap.findOne({ id });
+    const map: IMapResponse = await this.connectMap.findOne({ id });
     if (!map) {
       throw new ApiError(404, 'Mapa não existe!');
     }
 
     const mapPoints = await this.connectPoint.find({map_id: id});
     if(mapPoints)
-      map.points = mapPoints;
+      map.points = mapPoints.map(pointToData);
 
     return map;
   }

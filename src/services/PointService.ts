@@ -1,4 +1,4 @@
-import { getCustomRepository, Repository } from 'typeorm';
+import { DeepPartial, getCustomRepository, Repository } from 'typeorm';
 import { Point } from '../entities/Point';
 import { Map } from '../entities/Map';
 import { PointRepository } from '../repositories/PointRepository';
@@ -27,7 +27,7 @@ class PointService {
       throw new ApiError(404, 'Id de mapa não existe');
     }
 
-    const point = this.connectPoint.create(data);
+    const point = this.connectPoint.create(dataToPoint(data));
     await this.connectPoint.save(point);
 
     return point;
@@ -35,7 +35,7 @@ class PointService {
 
   async read() {
     const allPoints = await this.connectPoint.find();
-    return allPoints;
+    return allPoints.map(pointToData);
   }
 
   async readById(id: string) {
@@ -43,7 +43,7 @@ class PointService {
     if (!point) {
       throw new ApiError(404, 'Ponto não existe!');
     }
-    return point;
+    return pointToData(point);
   }
 
   async delete(id: string) {
@@ -67,8 +67,22 @@ class PointService {
       throw new ApiError(404, 'Id de mapa não existe');
     }
 
-    await this.connectPoint.update(point.id, data);
+    await this.connectPoint.update(point.id, dataToPoint(data));
   }
+}
+
+/**
+ * Converts IPoint to Point, encoding json object `neighbor` to string
+ */
+function dataToPoint(data: IPoint): DeepPartial<Point> {
+  return {...data, neighbor: JSON.stringify(data.neighbor)};
+}
+
+/**
+ * Converts Point to IPoint, decoding string `neighbor` to json object
+ */
+ export function pointToData(point: Point): IPoint {
+  return {...point, neighbor: JSON.parse(point.neighbor)};
 }
 
 export { PointService };
