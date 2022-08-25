@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ApiError } from '../exceptions/ApiError';
+import { throwApiError } from '../exceptions/ThrowApiError';
 import { IMap } from '../interfaces/IMap.interface';
 import { MapService } from '../services/MapService';
 import { MapValidator } from '../validators/MapValidator';
@@ -12,7 +12,7 @@ class MapController {
     try {
       await mapValidaMapValidator.createValidation().validate(data, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const mapService = new MapService();
@@ -33,7 +33,7 @@ class MapController {
     try {
       await mapValidaMapValidator.readByIdValidation().validate({ id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const mapService = new MapService();
@@ -48,7 +48,7 @@ class MapController {
     try {
       await mapValidaMapValidator.deleteByIdValidation().validate({ id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const mapService = new MapService();
@@ -66,7 +66,7 @@ class MapController {
         .updateValidation()
         .validate({ ...data, id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const mapService = new MapService();

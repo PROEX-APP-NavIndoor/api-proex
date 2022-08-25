@@ -5,6 +5,6 @@ export interface IPoint {
   x?: number;
   y?: number;
   breakPoint?: boolean;
-  neighbor?: string;
+  neighbor?: Object;
   map_id?: string;
 }

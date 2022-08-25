@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ApiError } from '../exceptions/ApiError';
+import { throwApiError } from '../exceptions/ThrowApiError';
 import { IBuilding } from '../interfaces/IBuilding.interface';
 import { BuildingService } from '../services/BuildingService';
 import { BuildingValidator } from '../validators/BuildingValidator';
@@ -12,7 +12,7 @@ class BuildingController {
     try {
       await buildingValidator.createValidation().validate(data, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const buildingService = new BuildingService();
@@ -33,7 +33,7 @@ class BuildingController {
     try {
       await buildingValidator.readByIdValidation().validate({ id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const buildingService = new BuildingService();
@@ -48,7 +48,7 @@ class BuildingController {
     try {
       await buildingValidator.readByIdValidation().validate({ id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const buildingService = new BuildingService();
@@ -64,7 +64,7 @@ class BuildingController {
     try {
       await buildingValidator.updateValidation().validate({ ...data, id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const buildingService = new BuildingService();

@@ -10,9 +10,8 @@ class PointValidator {
       y: yup.number().required('A coordenada y é obrigatória'),
       breakPoint: yup.boolean().required('O Break Point é obrigatório'),
       neighbor: yup
-        .string()
-        .required('Os vizinhos são obrigatórios')
-        .test('É JSON?', 'Os vizinhos não estão em formato JSON', (value) => isJSON(value)),
+        .object()
+        .required('Os vizinhos são obrigatórios'),
       map_id: yup
         .string()
         .uuid('Id de mapa deve ser do tipo uuid')
@@ -33,9 +32,8 @@ class PointValidator {
       y: yup.number().optional(),
       breakPoint: yup.boolean().optional(),
       neighbor: yup
-        .string()
-        .optional()
-        .test('É JSON?', 'Os vizinhos não estão em formato JSON', (value) => isJSON(value)),
+        .object()
+        .optional(),
       map_id: yup.string().uuid('Id de mapa deve ser do tipo uuid').optional(),
     });
   }
@@ -60,19 +58,3 @@ class PointValidator {
 }
 
 export { PointValidator };
-
-function isJSON(value: string): boolean {
-  if(value == null || undefined)
-            return true;
-  try {
-    value = JSON.parse(value);
-
-    if (typeof value === "object" && value !== null)
-      return true;
-
-    return false;
-
-  } catch (e) {
-    return false;
-  }
-};

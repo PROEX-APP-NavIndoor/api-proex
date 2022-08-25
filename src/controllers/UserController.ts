@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ApiError } from '../exceptions/ApiError';
+import { throwApiError } from '../exceptions/ThrowApiError';
 import { IUser } from '../interfaces/IUser.interface';
 import { UserService } from '../services/UserService';
 import { UserValidator } from '../validators/UserValidator';
@@ -12,7 +12,7 @@ class UserController {
     try {
       await userValidator.createValidation().validate(data, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const userService = new UserService();
@@ -33,7 +33,7 @@ class UserController {
     try {
       await userValidator.readByIdValidation().validate({ id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const userService = new UserService();
@@ -48,7 +48,7 @@ class UserController {
     try {
       await userValidator.deleteByIdValidation().validate({ id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const userService = new UserService();
@@ -64,7 +64,7 @@ class UserController {
     try {
       await userValidator.updateValidation().validate({ ...data, id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const userService = new UserService();

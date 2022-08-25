@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { ApiError } from '../exceptions/ApiError';
 import { IPoint } from '../interfaces/IPoint.interface';
 import { PointService } from '../services/PointService';
 import { PointValidator } from '../validators/PointValidator';
+import {throwApiError} from '../exceptions/ThrowApiError'
 
 class PointController {
   async create(req: Request, resp: Response) {
@@ -11,8 +11,8 @@ class PointController {
     const pointValidator = new PointValidator();
     try {
       await pointValidator.createValidation().validate(data, { abortEarly: false });
-    } catch (error) {
-      throw new ApiError(400, error.message);
+    } catch (genericError) {
+      throwApiError(400, genericError);
     }
 
     const pointService = new PointService();
@@ -33,7 +33,7 @@ class PointController {
     try {
       await pointValidator.readByIdValidation().validate({ id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const pointService = new PointService();
@@ -48,7 +48,7 @@ class PointController {
     try {
       await pointValidator.deleteByIdValidation().validate({ id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const pointService = new PointService();
@@ -64,7 +64,7 @@ class PointController {
     try {
       await pointValidator.updateValidation().validate({ ...data, id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message);
+      throwApiError(400, error);
     }
 
     const pointService = new PointService();
