@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { throwApiError } from '../exceptions/ThrowApiError';
 import { AuthenticateUserService } from '../services/AuthenticateUserService';
 import { AuthValidator } from '../validators/AuthValidator';
 
@@ -9,8 +10,8 @@ class AuthenticateUserController {
     const authValidator = new AuthValidator();
     try {
       await authValidator.authValidation().validate(request.body, { abortEarly: false });
-    } catch (error) {
-      return response.status(400).json({ message: error.message });
+    } catch (genericError) {
+      throwApiError(400, genericError);
     }
 
     const authenticateUserService = new AuthenticateUserService();
