@@ -3,23 +3,20 @@ import * as yup from 'yup';
 class OrganizationValidator {
   createValidation() {
     return yup.object().shape({
-      name: yup.string().required('Nome é obrigatório'),
-      cep: yup.string().required('Cep é obrigatório'),
-      state: yup.string().required('Estado é obrigatório'),
-      district: yup.string().required('Bairro é obrigatório'),
-      city: yup.string().required('Cidade é obrigatório'),
-      street: yup.string().required('Rua é obrigatório'),
-      number: yup.number().required('Número é obrigatório'),
-      description: yup.string().required('Descrição é obrigatória'),
+      name: yup.string().required(),
+      cep: yup.string().required(),
+      state: yup.string().required(),
+      district: yup.string().required(),
+      city: yup.string().required(),
+      street: yup.string().required(),
+      number: yup.number().required(),
+      description: yup.string().required(),
     });
   }
 
   updateValidation() {
     return yup.object().shape({
-      id: yup
-        .string()
-        .uuid('Id de organização deve ser do tipo uuid')
-        .required('Id de organização é obrigatório no parametro da requisição'),
+      id: yup.string().uuid().required(),
       name: yup.string().optional(),
       cep: yup.string().optional(),
       state: yup.string().optional(),
@@ -33,19 +30,13 @@ class OrganizationValidator {
 
   deleteByIdValidation() {
     return yup.object().shape({
-      id: yup
-        .string()
-        .uuid('Id de organização deve ser do tipo uuid')
-        .required('Id de organização é obrigatório no parametro da requisição'),
+      id: yup.string().uuid().required(),
     });
   }
 
   readByIdValidation() {
     return yup.object().shape({
-      id: yup
-        .string()
-        .uuid('Id de organização deve ser do tipo uuid')
-        .required('Id de organização é obrigatório no parametro da requisição'),
+      id: yup.string().uuid().required(),
     });
   }
 }
