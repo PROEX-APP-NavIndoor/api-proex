@@ -4,6 +4,8 @@ import { app } from '../../app';
 import createConnetion from '../../database';
 import { IPoint } from '../../interfaces/IPoint.interface';
 import { PointRepository } from '../../repositories/PointRepository';
+import { pointToData } from '../../services/PointService';
+import { yupConfig } from '../../validators/YupConfig'
 
 // ids de mapas cadastradas no seeders
 const mapId1 = 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e';
@@ -19,36 +21,36 @@ const createPoint : IPoint = {
   x: -25.3347702,
   y: -47.5304402,
   breakPoint: true,
-  neighbor: JSON.stringify({
+  neighbor: {
     right: "9fcbbe36-b52d-4192-8ff3-987049d7d9b3",
     left: "4ae7a74c-b598-404d-8fc0-6fa7b8c5c822"
-  }),
+  },
   map_id: mapId1,
 };
 
-const editPoint = {
+const editPoint : IPoint = {
   name: 'Point Test Edited',
   description: 'Point Test Description Edited',
   floor: 1,
   x: -25.3347701,
   y: -47.5304401,
   breakPoint: false,
-  neighbor: JSON.stringify({
+  neighbor: {
     right: "9fcbbe36-b52d-4192-8ff3-987049d7d9b3",
-  }),
+  },
   map_id: mapId2,
 };
 
-const pointInvalid = {
+const pointInvalid : IPoint = {
   name: 'Point Test 2',
   description: 'Point Test Description 2',
   floor: 2,
   x: -25.3347701,
   y: -47.5304401,
   breakPoint: true,
-  neighbor: JSON.stringify({
+  neighbor: {
     left: "9fcbbe36-b52d-4192-8ff3-987049d7d9b3",
-  }),
+  },
   map_id: idInexist,
 };
 
@@ -89,7 +91,7 @@ describe('Maps', () => {
     expect(response.body.x).toBe(createPoint.x);
     expect(response.body.y).toBe(createPoint.y);
     expect(response.body.breakPoint).toBe(createPoint.breakPoint);
-    expect(response.body.neighbor).toBe(createPoint.neighbor);
+    expect(response.body.neighbor).toEqual(createPoint.neighbor);
     expect(response.body.map_id).toBe(createPoint.map_id);
   });
 
@@ -111,7 +113,7 @@ describe('Maps', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Nome é obrigatório');
+    expect(response.body.message).toBe(yupConfig('name').mixed.required);
   });
 
   it('Should returns 400 beacause there is no point description', async () => {
@@ -132,7 +134,7 @@ describe('Maps', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Descrição é obrigatória');
+    expect(response.body.message).toBe(yupConfig('description').mixed.required);
   });
 
   it('Should returns 400 beacause there is no point floor', async () => {
@@ -153,7 +155,7 @@ describe('Maps', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('O Andar é obrigatório');
+    expect(response.body.message).toBe(yupConfig('floor').mixed.required);
   });
 
   it('Should returns 400 beacause there is no point x', async () => {
@@ -174,7 +176,7 @@ describe('Maps', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('A coordenada x é obrigatória');
+    expect(response.body.message).toBe(yupConfig('x').mixed.required);
   });
 
   it('Should returns 400 beacause there is no point y', async () => {
@@ -195,7 +197,7 @@ describe('Maps', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('A coordenada y é obrigatória');
+    expect(response.body.message).toBe(yupConfig('y').mixed.required);
   });
 
   it('Should returns 400 beacause there is no point break point', async () => {
@@ -216,7 +218,7 @@ describe('Maps', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('O Break Point é obrigatório');
+    expect(response.body.message).toBe(yupConfig('breakPoint').mixed.required);
   });
 
   it('Should returns 400 beacause there is no point neighbor', async () => {
@@ -234,26 +236,7 @@ describe('Maps', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Os vizinhos são obrigatórios');
-  });
-
-  it('Should returns 400 beacause neighbor is not a valid JSON', async () => {
-    const response = await request(app)
-      .post('/points')
-      .set('Authorization', `bearer ${token}`)
-      .send({
-        name: 'Point Test',
-        description: 'Point Test Description',
-        floor: 1,
-        x: -25.3347702,
-        y: -47.5304402,
-        breakPoint: true,
-        neighbor: "{notJSON}",
-        map_id: mapId1,
-      });
-
-    expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Os vizinhos não estão em formato JSON');
+    expect(response.body.message).toBe(yupConfig('neighbor').mixed.required);
   });
 
   it('Should returns 400 beacause there is no point map_id', async () => {
@@ -274,7 +257,7 @@ describe('Maps', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id de mapa é obrigatório');
+    expect(response.body.message).toBe(yupConfig('map_id').mixed.required);
   });
 
   it('Should not be able to create a point that already exists and return 400', async () => {
@@ -305,7 +288,7 @@ describe('Maps', () => {
       .send(editPoint);
 
     const repository = getCustomRepository(PointRepository);
-    const pointUpdated = await repository.findOne({ id: pointId });
+    const pointUpdated = pointToData(await repository.findOne({ id: pointId }));
 
     expect(response.status).toBe(200);
     expect(editPoint.name).toBe(pointUpdated.name);
@@ -314,7 +297,7 @@ describe('Maps', () => {
     expect(editPoint.x).toBe(pointUpdated.x);
     expect(editPoint.y).toBe(pointUpdated.y);
     expect(editPoint.breakPoint).toBe(pointUpdated.breakPoint);
-    expect(editPoint.neighbor).toBe(pointUpdated.neighbor);
+    expect(editPoint.neighbor).toEqual(pointUpdated.neighbor);
     expect(editPoint.map_id).toBe(pointUpdated.map_id);
     expect(response.body.message).toBe('Ponto atualizado com sucesso!');
   });
@@ -326,7 +309,7 @@ describe('Maps', () => {
       .send(editPoint);
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id de ponto deve ser do tipo uuid');
+    expect(response.body.message).toBe(yupConfig('id').string.uuid);
   });
 
   it('Should return 404 because when update point, map_id does not exist in the database', async () => {
@@ -349,25 +332,6 @@ describe('Maps', () => {
     expect(response.body.message).toBe('Ponto não existe!');
   });
 
-  it('Should returns 400 beacause neighbor is not a valid JSON', async () => {
-    const response = await request(app)
-      .put(`/points/${pointId}`)
-      .set('Authorization', `bearer ${token}`)
-      .send({
-        name: 'Point Test',
-        description: 'Point Test Description',
-        floor: 1,
-        x: -25.3347702,
-        y: -47.5304402,
-        breakPoint: true,
-        neighbor: "{notJSON}",
-        map_id: mapId1,
-      });
-
-    expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Os vizinhos não estão em formato JSON');
-  });
-
   // testes para visualição de ponto por id
   it('Should be able to get a point by Id and return 200', async () => {
     const response = await request(app)
@@ -381,7 +345,7 @@ describe('Maps', () => {
     expect(response.body.x).toBe(editPoint.x);
     expect(response.body.y).toBe(editPoint.y);
     expect(response.body.breakPoint).toBe(editPoint.breakPoint);
-    expect(response.body.neighbor).toBe(editPoint.neighbor);
+    expect(response.body.neighbor).toEqual(editPoint.neighbor);
     expect(response.body.map_id).toBe(editPoint.map_id);
   });
 
@@ -398,7 +362,7 @@ describe('Maps', () => {
     const response = await request(app).get(`/points/2`).set('Authorization', `bearer ${token}`);
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id de ponto deve ser do tipo uuid');
+    expect(response.body.message).toBe(yupConfig('id').string.uuid);
   });
 
   // testes para visualização de todos pontos
@@ -430,7 +394,7 @@ describe('Maps', () => {
     const response = await request(app).delete(`/points/2`).set('Authorization', `bearer ${token}`);
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id de ponto deve ser do tipo uuid');
+    expect(response.body.message).toBe(yupConfig('id').string.uuid);
   });
 
   it('Should return 404 for delete missing id point', async () => {

@@ -3,7 +3,9 @@ import { getConnection, getCustomRepository } from 'typeorm';
 import { app } from '../../app';
 import createConnection from '../../database';
 import { EnumRoleUser } from '../../entities/User';
+import { IUser } from '../../interfaces/IUser.interface';
 import { UserRepository } from '../../repositories/UserRepository';
+import { yupConfig } from '../../validators/YupConfig';
 
 // ids de organizações cadastradas no seeders
 const organizationId1 = 'ad8fb4ff-a518-42c0-af78-ac5062eaf53d';
@@ -18,7 +20,7 @@ const loginUser = {
   password: '123456',
 };
 
-const createUser = {
+const createUser : IUser = {
   name: 'User example',
   email: 'user@example.com',
   password: '123456',
@@ -26,7 +28,7 @@ const createUser = {
   organization_id: organizationId1,
 };
 
-const editedUser = {
+const editedUser : IUser = {
   name: 'User example edited',
   email: 'user@example_edit.com',
   password: '123456',
@@ -34,7 +36,7 @@ const editedUser = {
   organization_id: organizationId2,
 };
 
-const userInvalid = {
+const userInvalid : IUser = {
   name: 'User example 10',
   email: 'user10@example.com',
   password: '123456',
@@ -85,7 +87,7 @@ describe('Users', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Nome é obrigatório');
+    expect(response.body.message).toBe(yupConfig('name').mixed.required);
   });
 
   it('Should returns 400 beacause there is no user email', async () => {
@@ -100,7 +102,7 @@ describe('Users', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('E-mail é obrigatório');
+    expect(response.body.message).toBe(yupConfig('email').mixed.required);
   });
 
   it('Should returns 400 beacause there is no valid user email', async () => {
@@ -116,7 +118,7 @@ describe('Users', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('E-mail incorreto');
+    expect(response.body.message).toBe(yupConfig('email').string.email);
   });
 
   it('Should returns 400 beacause there is no user password', async () => {
@@ -131,7 +133,7 @@ describe('Users', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Senha é obrigatória');
+    expect(response.body.message).toBe(yupConfig('password').mixed.required);
   });
 
   it('Should returns 400 beacause there is no user role', async () => {
@@ -146,7 +148,7 @@ describe('Users', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Tipo de usuário é obrigatório');
+    expect(response.body.message).toBe(yupConfig('role').mixed.required);
   });
 
   it('Should returns 400 beacause there is no valid user role', async () => {
@@ -162,9 +164,7 @@ describe('Users', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe(
-      'role must be one of the following values: SUPER, NORMAL, EMPLOYEE',
-    );
+    expect(response.body.message).toBe(yupConfig('role', ['SUPER', 'NORMAL', 'EMPLOYEE'].join(', ')).mixed.oneOf);
   });
 
   it('Should returns 400 beacause there is no user organization_id', async () => {
@@ -179,7 +179,7 @@ describe('Users', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id da Organização é obrigatória');
+    expect(response.body.message).toBe(yupConfig('organization_id').mixed.required);
   });
 
   it('Should not be able to create a user with exists email and return 400', async () => {
@@ -227,7 +227,7 @@ describe('Users', () => {
       .send(editedUser);
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id de usuário deve ser do tipo uuid');
+    expect(response.body.message).toBe(yupConfig('id').string.uuid);
   });
 
   it('Should return 404 for update missing id user', async () => {
@@ -265,7 +265,7 @@ describe('Users', () => {
     const response = await request(app).get(`/users/2`).set('Authorization', `bearer ${token}`);
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id de usuário deve ser do tipo uuid');
+    expect(response.body.message).toBe(yupConfig('id').string.uuid);
   });
 
   // testes para visualização de todos os usuários
@@ -297,7 +297,7 @@ describe('Users', () => {
     const response = await request(app).delete(`/users/2`).set('Authorization', `bearer ${token}`);
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id de usuário deve ser do tipo uuid');
+    expect(response.body.message).toBe(yupConfig('id').string.uuid);
   });
 
   it('Should return 404 for delete missing id user', async () => {
