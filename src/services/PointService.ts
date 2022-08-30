@@ -30,7 +30,7 @@ class PointService {
     const point = this.connectPoint.create(dataToPoint(data));
     await this.connectPoint.save(point);
 
-    return point;
+    return pointToData(point);
   }
 
   async read() {
