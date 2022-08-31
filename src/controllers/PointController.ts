@@ -60,6 +60,10 @@ class PointController {
     const { id } = req.params;
     const { ...data }: IPoint = req.body;
 
+    //Prevents changing point map_id
+    if(data.map_id)
+      delete data.map_id;
+
     const pointValidator = new PointValidator();
     try {
       await pointValidator.updateValidation().validate({ ...data, id }, { abortEarly: false });

@@ -11,7 +11,6 @@ class ForgotPasswordController {
     try {
       await forgotValidator.forgotValidation().validate({ email }, { abortEarly: false });
     } catch (error) {
-      console.log(error);
       throwApiError(400, error);
     }
 

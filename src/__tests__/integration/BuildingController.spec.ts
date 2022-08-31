@@ -2,7 +2,9 @@ import request from 'supertest';
 import { getConnection, getCustomRepository } from 'typeorm';
 import { app } from '../../app';
 import createConnetion from '../../database';
+import { IBuilding } from '../../interfaces/IBuilding.interface';
 import { BuildingRepository } from '../../repositories/BuildingRepository';
+import { yupConfig } from '../../validators/YupConfig'
 
 // ids de organizações cadastradas no seeders
 const organizationId1 = 'ad8fb4ff-a518-42c0-af78-ac5062eaf53d';
@@ -11,7 +13,7 @@ const organizationId2 = '45659fc4-1946-4080-adba-d084543c3324';
 // id inexistente
 const idInexist = 'bf918fbb-94a9-4dd5-9db1-85ce524ed306';
 
-const createBuilding = {
+const createBuilding : IBuilding = {
   name: 'Prédio Test',
   latitude: -25.3347773,
   longitude: -47.5304414,
@@ -19,7 +21,7 @@ const createBuilding = {
   organization_id: organizationId1,
 };
 
-const editedBuilding = {
+const editedBuilding : IBuilding = {
   name: 'Prédio Test editado',
   latitude: -26.3347773,
   longitude: -48.5304414,
@@ -27,7 +29,7 @@ const editedBuilding = {
   organization_id: organizationId2,
 };
 
-const buildingInvalid = {
+const buildingInvalid : IBuilding = {
   name: 'Prédio Test 2',
   latitude: -25.3347779,
   longitude: -47.5304419,
@@ -84,7 +86,7 @@ describe('Buildings', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Nome é obrigatório');
+    expect(response.body.message).toBe(yupConfig('name').mixed.required);
   });
 
   it('Should returns 400 beacause there is no building latitude', async () => {
@@ -99,7 +101,7 @@ describe('Buildings', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Latitude é obrigatória');
+    expect(response.body.message).toBe(yupConfig('latitude').mixed.required);
   });
 
   it('Should returns 400 beacause there is no building longitude', async () => {
@@ -114,7 +116,7 @@ describe('Buildings', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Longitude é obrigatória');
+    expect(response.body.message).toBe(yupConfig('longitude').mixed.required);
   });
 
   it('Should returns 400 beacause there is no building description', async () => {
@@ -129,7 +131,7 @@ describe('Buildings', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Descrição é obrigatória');
+    expect(response.body.message).toBe(yupConfig('description').mixed.required);
   });
 
   it('Should returns 400 beacause there is no building organization_id', async () => {
@@ -144,7 +146,7 @@ describe('Buildings', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id da Organização é obrigatória');
+    expect(response.body.message).toBe(yupConfig('organization_id').mixed.required);
   });
 
   it('Should not be able to create a building with exists and return 400', async () => {
@@ -193,7 +195,7 @@ describe('Buildings', () => {
       .send(editedBuilding);
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id de prédio deve ser do tipo uuid');
+    expect(response.body.message).toBe(yupConfig('id').string.uuid);
   });
 
   it('Should return 404 because when update building, organization_id does not exist in the database', async () => {
@@ -243,7 +245,7 @@ describe('Buildings', () => {
     const response = await request(app).get(`/buildings/2`).set('Authorization', `bearer ${token}`);
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id de prédio deve ser do tipo uuid');
+    expect(response.body.message).toBe(yupConfig('id').string.uuid);
   });
 
   // testes para visualização de todos prédios
@@ -277,7 +279,7 @@ describe('Buildings', () => {
       .set('Authorization', `bearer ${token}`);
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id de prédio deve ser do tipo uuid');
+    expect(response.body.message).toBe(yupConfig('id').string.uuid);
   });
 
   it('Should return 404 for delete missing id building', async () => {

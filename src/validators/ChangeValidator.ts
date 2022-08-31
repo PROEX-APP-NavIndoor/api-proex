@@ -3,9 +3,9 @@ import * as yup from 'yup';
 class ChangeValidator {
   changeValidation() {
     return yup.object().shape({
-      email: yup.string().email('E-mail incorreto').required('E-mail é obrigatório'),
-      password: yup.string().required('Senha é obrigatória'),
-      codVerificacao: yup.string().required('Código de verificação é obrigatório'),
+      email: yup.string().email().required(),
+      password: yup.string().required(),
+      codVerificacao: yup.string().required(),
     });
   }
 }

@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import { app } from '../../app';
 import createConnection from '../../database';
 import { UserRepository } from '../../repositories/UserRepository';
+import { yupConfig } from '../../validators/YupConfig'
 
 // email cadastrado no seeder
 const emailExists = 'user2@gmail.com';
@@ -63,7 +64,7 @@ describe('Auth', () => {
     });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('E-mail é obrigatório');
+    expect(response.body.message).toBe(yupConfig('email').mixed.required);
   });
 
   it('Should return 400 because the password was not informed', async () => {
@@ -73,7 +74,7 @@ describe('Auth', () => {
     });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Senha é obrigatória');
+    expect(response.body.message).toBe(yupConfig('password').mixed.required);
   });
 
   it('Should return 400 because the codVerificacao was not informed', async () => {
@@ -83,6 +84,6 @@ describe('Auth', () => {
     });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Código de verificação é obrigatório');
+    expect(response.body.message).toBe(yupConfig('codVerificacao').mixed.required);
   });
 });

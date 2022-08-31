@@ -2,12 +2,14 @@ import request from 'supertest';
 import { getConnection, getCustomRepository } from 'typeorm';
 import { app } from '../../app';
 import createConnetion from '../../database';
+import { IOrganization } from '../../interfaces/IOrganization.interface';
 import { OrganizationRepository } from '../../repositories/OrganizationRepository';
+import { yupConfig } from '../../validators/YupConfig'
 
 // id inexistente
 const idInexist = 'bf918fbb-94a9-4dd5-9db1-85ce524ed306';
 
-const createOrganization = {
+const createOrganization : IOrganization = {
   name: 'Organização Tal',
   cep: '37510-000',
   state: 'Minas Gerais',
@@ -18,7 +20,7 @@ const createOrganization = {
   description: 'Descrição Tal',
 };
 
-const editedOrganization = {
+const editedOrganization : IOrganization = {
   name: 'Organização editada',
   cep: '37500-002',
   state: 'Minas Gerais',
@@ -85,7 +87,7 @@ describe('Organizations', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Nome é obrigatório');
+    expect(response.body.message).toBe(yupConfig('name').mixed.required);
   });
 
   it('Should returns 400 beacause there is no organization cep', async () => {
@@ -103,7 +105,7 @@ describe('Organizations', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Cep é obrigatório');
+    expect(response.body.message).toBe(yupConfig('cep').mixed.required);
   });
 
   it('Should returns 400 beacause there is no organization state', async () => {
@@ -121,7 +123,7 @@ describe('Organizations', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Estado é obrigatório');
+    expect(response.body.message).toBe(yupConfig('state').mixed.required);
   });
 
   it('Should returns 400 beacause there is no organization district', async () => {
@@ -139,7 +141,7 @@ describe('Organizations', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Bairro é obrigatório');
+    expect(response.body.message).toBe(yupConfig('district').mixed.required);
   });
 
   it('Should returns 400 beacause there is no organization city', async () => {
@@ -157,7 +159,7 @@ describe('Organizations', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Cidade é obrigatório');
+    expect(response.body.message).toBe(yupConfig('city').mixed.required);
   });
 
   it('Should returns 400 beacause there is no organization street', async () => {
@@ -175,7 +177,7 @@ describe('Organizations', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Rua é obrigatório');
+    expect(response.body.message).toBe(yupConfig('street').mixed.required);
   });
 
   it('Should returns 400 beacause there is no organization number', async () => {
@@ -193,7 +195,7 @@ describe('Organizations', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Número é obrigatório');
+    expect(response.body.message).toBe(yupConfig('number').mixed.required);
   });
 
   it('Should returns 400 beacause there is no organization description', async () => {
@@ -211,10 +213,10 @@ describe('Organizations', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Descrição é obrigatória');
+    expect(response.body.message).toBe(yupConfig('description').mixed.required);
   });
 
-  it('Should not be able to create a organization with exists and return 400', async () => {
+  it('Should not be able to create a organization which exists and return 400', async () => {
     const response = await request(app)
       .post('/organizations')
       .set('Authorization', `bearer ${token}`)
@@ -253,7 +255,7 @@ describe('Organizations', () => {
       .send(editedOrganization);
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id de organização deve ser do tipo uuid');
+    expect(response.body.message).toBe(yupConfig('id').string.uuid);
   });
 
   it('Should return 404 for update missing id organization', async () => {
@@ -298,7 +300,7 @@ describe('Organizations', () => {
       .set('Authorization', `bearer ${token}`);
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id de organização deve ser do tipo uuid');
+    expect(response.body.message).toBe(yupConfig('id').string.uuid);
   });
 
   // teste para visualização de todas as organizações
@@ -334,7 +336,7 @@ describe('Organizations', () => {
       .set('Authorization', `bearer ${token}`);
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Id de organização deve ser do tipo uuid');
+    expect(response.body.message).toBe(yupConfig('id').string.uuid);
   });
 
   it('Should return 404 for delete missing id organization', async () => {

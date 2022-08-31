@@ -3,6 +3,7 @@ import { getConnection, getCustomRepository } from 'typeorm';
 import { app } from '../../app';
 import createConnection from '../../database';
 import { UserRepository } from '../../repositories/UserRepository';
+import { yupConfig } from '../../validators/YupConfig'
 
 // email cadastrado no seeder
 const emailExists = 'user3@gmail.com';
@@ -46,6 +47,6 @@ describe('Auth', () => {
     const response = await request(app).post('/forgot-password').send({});
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('E-mail é obrigatório');
+    expect(response.body.message).toBe(yupConfig('email').mixed.required);
   });
 });
