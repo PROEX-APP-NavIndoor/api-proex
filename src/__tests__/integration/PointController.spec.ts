@@ -37,8 +37,7 @@ const editPoint : IPoint = {
   breakPoint: false,
   neighbor: {
     right: "9fcbbe36-b52d-4192-8ff3-987049d7d9b3",
-  },
-  map_id: mapId2,
+  }
 };
 
 const pointInvalid : IPoint = {
@@ -298,7 +297,6 @@ describe('Maps', () => {
     expect(editPoint.y).toBe(pointUpdated.y);
     expect(editPoint.breakPoint).toBe(pointUpdated.breakPoint);
     expect(editPoint.neighbor).toEqual(pointUpdated.neighbor);
-    expect(editPoint.map_id).toBe(pointUpdated.map_id);
     expect(response.body.message).toBe('Ponto atualizado com sucesso!');
   });
 
@@ -310,16 +308,6 @@ describe('Maps', () => {
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe(yupConfig('id').string.uuid);
-  });
-
-  it('Should return 404 because when update point, map_id does not exist in the database', async () => {
-    const response = await request(app)
-      .put(`/points/${pointId}`)
-      .set('Authorization', `bearer ${token}`)
-      .send(pointInvalid);
-
-    expect(response.status).toBe(404);
-    expect(response.body.message).toBe('Id de mapa não existe');
   });
 
   it('Should return 404 for update missing id point', async () => {
@@ -346,7 +334,7 @@ describe('Maps', () => {
     expect(response.body.y).toBe(editPoint.y);
     expect(response.body.breakPoint).toBe(editPoint.breakPoint);
     expect(response.body.neighbor).toEqual(editPoint.neighbor);
-    expect(response.body.map_id).toBe(editPoint.map_id);
+    expect(response.body.map_id).toBe(createPoint.map_id); //editPoint can't change map_id
   });
 
   it('Should return 404 for searching missing id point', async () => {

@@ -23,8 +23,7 @@ class PointValidator {
       x: yup.number().optional(),
       y: yup.number().optional(),
       breakPoint: yup.boolean().optional(),
-      neighbor: yup.object().optional(),
-      map_id: yup.string().uuid().optional(),
+      neighbor: yup.object().optional()
     });
   }
 
