@@ -17,6 +17,7 @@ const createMap : IMap = {
   name: 'Map Test',
   source: 'https://www.joaoleitao.com/viagens/wp-content/uploads/2008/05/MAPA-DO-MUNDO-1.jpg',
   description: 'Map Test Description',
+  scale_factor: 11.5,
   building_id: buildingId1,
 };
 
@@ -24,6 +25,7 @@ const editedMap : IMap = {
   name: 'Map Test editado',
   source: 'https://www.joaoleitao.com/viagens/wp-content/uploads/2008/05/MAPA-DO-MUNDO-1.jpg',
   description: 'Descrição do map Test editado',
+  scale_factor: 5,
   building_id: buildingId2,
 };
 
@@ -31,6 +33,7 @@ const mapInvalid : IMap = {
   name: 'Map Test 2',
   source: 'https://www.joaoleitao.com/viagens/wp-content/uploads/2008/05/MAPA-DO-MUNDO-1.jpg',
   description: 'Map Test Description 2',
+  scale_factor: 11.5,
   building_id: idInexist,
 };
 
@@ -149,6 +152,7 @@ describe('Maps', () => {
     expect(mapUpdated.name).toBe(editedMap.name);
     expect(mapUpdated.source).toBe(editedMap.source);
     expect(mapUpdated.description).toBe(editedMap.description);
+    expect(mapUpdated.scale_factor).toBe(editedMap.scale_factor);
     expect(mapUpdated.building_id).toBe(editedMap.building_id);
     expect(response.body.message).toBe('Mapa atualizado com sucesso!');
   });
@@ -193,6 +197,7 @@ describe('Maps', () => {
     expect(response.body.name).toBe(editedMap.name);
     expect(response.body.source).toBe(editedMap.source);
     expect(response.body.description).toBe(editedMap.description);
+    expect(response.body.scale_factor).toBe(editedMap.scale_factor);
     expect(response.body.building_id).toBe(editedMap.building_id);
   });
 
