@@ -89,8 +89,8 @@ if (process.env.NODE_ENV === 'development') {
         rejectUnauthorized: false,
       },
     },
-    migrations: ['src/database/migrations/*.js'],
-    entities: ['src/entities/*.js'],
+    migrations: ['src/database/migrations/*.ts'],
+    entities: ['src/entities/*.ts'],
     cli: {
       migrationsDir: 'src/database/migrations',
     },
