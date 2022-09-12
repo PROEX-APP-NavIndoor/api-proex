@@ -26,6 +26,9 @@ class Map {
   @Column()
   description: string;
 
+  @Column()
+  scale_factor: number;
+
   @CreateDateColumn()
   created_at: Date;
 
