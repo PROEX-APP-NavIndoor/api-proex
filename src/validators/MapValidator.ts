@@ -6,6 +6,7 @@ class MapValidator {
       name: yup.string().required(),
       source: yup.string().required(),
       description: yup.string().required(),
+      scale_factor: yup.number().optional(),
       building_id: yup.string().uuid().required(),
     });
   }
@@ -16,6 +17,7 @@ class MapValidator {
       name: yup.string().optional(),
       source: yup.string().optional(),
       description: yup.string().optional(),
+      scale_factor: yup.number().optional(),
       building_id: yup.string().uuid().optional(),
     });
   }
