@@ -15,7 +15,7 @@
 </p>
 
 <div align="center">
-    <img src="https://raw.githubusercontent.com/ygor-salles/api-proex/dev/assets/Modelagem-API-Proex.png" alt="Modelagem" >
+    <img src="https://github.com/PROEX-APP-NavIndoor/api-proex/blob/dev/assets/Modelagem_13_09_2022.png" alt="Modelagem" >
 </div>
  
 ----
