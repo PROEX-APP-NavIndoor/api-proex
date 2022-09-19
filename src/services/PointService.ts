@@ -34,7 +34,11 @@ class PointService {
   }
 
   async read() {
-    const allPoints = await this.connectPoint.find();
+    const allPoints = await this.connectPoint.find({
+      order: {
+        created_at: "DESC"
+      }
+    });
     return allPoints.map(pointToData);
   }
 
