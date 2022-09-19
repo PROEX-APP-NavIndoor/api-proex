@@ -51,7 +51,14 @@ class MapService {
       throw new ApiError(404, 'Mapa não existe!');
     }
 
-    const mapPoints = await this.connectPoint.find({map_id: id});
+    const mapPoints = await this.connectPoint.find({
+      where: {
+        map_id: id
+      },
+      order: {
+        created_at: "DESC"
+      }
+    });
     if(mapPoints)
       map.points = mapPoints.map(pointToData);
 
