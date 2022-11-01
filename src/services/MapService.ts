@@ -5,10 +5,13 @@ import { Building } from '../entities/Building';
 import { BuildingRepository } from '../repositories/BuildingRepository';
 import { Point } from '../entities/Point';
 import { PointRepository } from '../repositories/PointRepository';
-import { ApiError } from '../exceptions/ApiError';
+import { PointParent } from '../entities/PointParent';
+import { PointChild } from '../entities/PointChild';
+import { PointChildRepository } from '../repositories/Point_ChildRepository';
 import { IMap } from '../interfaces/IMap.interface';
 import { IMapResponse } from '../interfaces/IMapResponse.interface'
-import { pointToData } from './PointService'
+import { IMapPoint } from '../interfaces/IMapPoint.interface';
+import { ApiError } from '../exceptions/ApiError';
 
 class MapService {
   private connectMap: Repository<Map>;
@@ -20,7 +23,7 @@ class MapService {
   constructor() {
     this.connectMap = getCustomRepository(MapRepository);
     this.connectBuilding = getCustomRepository(BuildingRepository);
-    this.connectPoint = getCustomRepository(PointRepository)
+    this.connectPoint = getCustomRepository(PointRepository);
   }
 
   async create(data: IMap) {
@@ -51,17 +54,21 @@ class MapService {
       throw new ApiError(404, 'Mapa não existe!');
     }
 
-    const mapPoints = await this.connectPoint.find({
-      where: {
-        map_id: id
-      },
-      order: {
-        created_at: "DESC"
-      }
-    });
-    if(mapPoints)
-      map.points = mapPoints.map(pointToData);
 
+    const mapPointParents = await this.connectPoint
+      .createQueryBuilder('point')
+      .innerJoinAndMapOne('point.parent', PointParent, 'parent', 'point.id = parent.id')
+      .where(`point.map_id = '${id}'`)
+      .getMany();
+
+    const mapPointChilds = await this.connectPoint
+      .createQueryBuilder('point')
+      .innerJoinAndMapOne('point.child', PointChild, 'child', 'point.id = child.id')
+      .getMany();
+
+    if (mapPointParents)
+      map.points = mapPointsToData(mapPointParents, mapPointChilds);
+    
     return map;
   }
 
@@ -85,6 +92,33 @@ class MapService {
 
     await this.connectMap.update(map.id, data);
   }
+}
+
+/**
+ * Converts Map to `IMapResponse` (response format to be received by front-end applications)
+ */
+export function mapPointsToData(mapPointParents: Point[], mapPointChilds: Point[]): IMapPoint[] {
+  let mapChildren = mapPointChilds.map((mapPointChild: Point) => {
+    let point = {
+      ...mapPointChild,
+      ...mapPointChild.child
+    };
+
+    delete point['child'];
+    return point;
+  })
+
+  return mapPointParents.map((mapPointParent: Point) => {
+    let point: IMapPoint = {
+      ...mapPointParent,
+      ...mapPointParent.parent,
+      children: mapChildren.filter(mapChild => mapChild.point_parent_id === mapPointParent.id),
+      neighbor: JSON.parse(mapPointParent.parent.neighbor)
+    };
+
+    delete point['parent'];
+    return point;
+  })
 }
 
 export { MapService };

@@ -4,6 +4,9 @@ import { BuildingRepository } from '../../repositories/BuildingRepository';
 import { MapRepository } from '../../repositories/MapRepository';
 import { OrganizationRepository } from '../../repositories/OrganizationRepository';
 import { PointRepository } from '../../repositories/PointRepository';
+import { PointParentRepository } from '../../repositories/Point_ParentRepository';
+import { PointChildRepository } from '../../repositories/Point_ChildRepository';
+import { EnumTypePoint } from '../../entities/PointParent';
 import { UserRepository } from '../../repositories/UserRepository';
 import 'dotenv/config';
 
@@ -223,108 +226,142 @@ class DataSeed {
   }
 
   public static async createPoints(): Promise<void> {
-    const repository = getCustomRepository(PointRepository);
-    const arrayPoints = [];
+    const repository = {
+      point: getCustomRepository(PointRepository),
+      parent: getCustomRepository(PointParentRepository),
+      child: getCustomRepository(PointChildRepository)
+    };
+    const array = {
+      points:[],
+      parents: [],
+      childs: []
+    };
 
-    arrayPoints.push(
-      repository.create({
+    array.points.push(
+      repository.point.create({
         id: '9fcbbe36-b52d-4192-8ff3-987049d7d9b3',
-        name: 'Ponto 1',
-        description: 'Descrição do ponto 1',
+        name: 'Ponto pai 1',
+        description: 'Descrição do ponto pai 1',
         x: 10.123,
         y: -25.3347773,
         floor: 1,
-        breakPoint: true,
+        map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e'
+      })
+    );
+    array.parents.push(
+      repository.parent.create({
+        id: '9fcbbe36-b52d-4192-8ff3-987049d7d9b3',
+        type: EnumTypePoint.COMMON,
         neighbor: JSON.stringify({
           left: "de845e22-8eaf-466b-a6c2-40821975b959"
-        }),
-        map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e',
-      }),
+        })
+      })
     );
 
-    arrayPoints.push(
-      repository.create({
-        id: 'de845e22-8eaf-466b-a6c2-40821975b959',
-        name: 'Ponto 2',
-        description: 'Descrição do ponto 2',
+    array.points.push(
+      repository.point.create({
+        id: '02036a0b-f170-4bd8-bed5-4f7d4b69e1da',
+        name: 'Ponto pai 2',
+        description: 'Descrição do ponto pai 2',
         x: 2.123,
         y: -25.3347773,
         floor: 1,
-        breakPoint: false,
+        map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e'
+      })
+    );
+    array.parents.push(
+      repository.parent.create({
+        id: '02036a0b-f170-4bd8-bed5-4f7d4b69e1da',
+        type: EnumTypePoint.COMMON,
         neighbor: JSON.stringify({
-          right: "9fcbbe36-b52d-4192-8ff3-987049d7d9b3",
-          left: "4ae7a74c-b598-404d-8fc0-6fa7b8c5c822"
-        }),
-        map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e',
-      }),
+          right: "9fcbbe36-b52d-4192-8ff3-987049d7d9b3"
+        })
+      })
     );
 
-    arrayPoints.push(
-      repository.create({
-        id: '4ae7a74c-b598-404d-8fc0-6fa7b8c5c822',
-        name: 'Ponto 3',
-        description: 'Descrição do ponto 3',
-        x: 1.123,
-        y: -25.3347773,
-        floor: 1,
-        breakPoint: true,
-        neighbor: JSON.stringify({
-          right: "de845e22-8eaf-466b-a6c2-40821975b959"
-      }),
-        map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e',
-      }),
-    );
-
-    arrayPoints.push(
-      repository.create({
-        id: '6136957d-8350-40ec-bde4-8f300b317ad2',
-        name: 'Ponto 4',
-        description: 'Descrição do ponto 4',
-        x: 10.123,
-        y: 28.3347773,
-        floor: 2,
-        breakPoint: true,
-        neighbor: JSON.stringify({
-          left: "de845e22-8eaf-466b-a6c2-40821975b959"
-      }),
-        map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e',
-      }),
-    );
-
-    arrayPoints.push(
-      repository.create({
-        id: '3440ccf1-66b4-4c3b-9ad7-dd7e7c89549c',
-        name: 'Ponto 5',
-        description: 'Descrição do ponto 5',
+    array.points.push(
+      repository.point.create({
+        id: 'a241e031-6890-46ad-a150-0cfa642eabbb',
+        name: 'Ponto pai 3',
+        description: 'Descrição do ponto pai 3',
         x: 2.123,
-        y: 28.3347773,
-        floor: 2,
-        breakPoint: false,
+        y: 25.3347773,
+        floor: 1,
+        map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e'
+      })
+    );
+    array.parents.push(
+      repository.parent.create({
+        id: 'a241e031-6890-46ad-a150-0cfa642eabbb',
+        type: EnumTypePoint.COMMON,
         neighbor: JSON.stringify({
-          right: "9fcbbe36-b52d-4192-8ff3-987049d7d9b3",
-          left: "4ae7a74c-b598-404d-8fc0-6fa7b8c5c822"
-        }),
-        map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e',
-      }),
+          bottom: "02036a0b-f170-4bd8-bed5-4f7d4b69e1da"
+        })
+      })
     );
 
-    arrayPoints.push(
-      repository.create({
-        id: 'a29f4630-7886-4a02-ad90-928b847eb840',
-        name: 'Ponto 6',
-        description: 'Descrição do ponto 6',
-        x: 1.123,
-        y: 28.3347773,
-        floor: 2,
-        breakPoint: true,
+    array.points.push(
+      repository.point.create({
+        id: '7673ae02-8c33-46a4-a7ea-14836259dbc0',
+        name: 'Ponto pai 4',
+        description: 'Descrição do ponto pai 4',
+        x: 2.123,
+        y: 30.3347773,
+        floor: 1,
+        map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e'
+      })
+    );
+    array.parents.push(
+      repository.parent.create({
+        id: '7673ae02-8c33-46a4-a7ea-14836259dbc0',
+        type: EnumTypePoint.COMMON,
         neighbor: JSON.stringify({
-          right: "de845e22-8eaf-466b-a6c2-40821975b959"
-      }),
-        map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e',
-      }),
+          bottom: "a241e031-6890-46ad-a150-0cfa642eabbb"
+        })
+      })
     );
 
-    await repository.save(arrayPoints);
+    array.points.push(
+      repository.point.create({
+        id: '8eb19032-85bc-4258-a54d-fbfe71883aea',
+        name: 'Ponto Filho 1',
+        description: 'Descrição do ponto filho 1',
+        x: 9.123,
+        y: -26.3347773,
+        floor: 1,
+        map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e'
+      })
+    );
+    array.childs.push(
+      repository.child.create({
+        id: '7673ae02-8c33-46a4-a7ea-14836259dbc0',
+        point_parent_id: '9fcbbe36-b52d-4192-8ff3-987049d7d9b3',
+        is_obstacle: false
+      })
+    );
+
+    array.points.push(
+      repository.point.create({
+        id: '2966b802-2f06-4bcd-8aa6-4e0e5dd3c555',
+        name: 'Ponto Filho 2',
+        description: 'Descrição do ponto filho 2',
+        x: 11.123,
+        y: -23.3347773,
+        floor: 1,
+        map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e'
+      })
+    );
+    array.childs.push(
+      repository.child.create({
+        id: '2966b802-2f06-4bcd-8aa6-4e0e5dd3c555',
+        point_parent_id: '9fcbbe36-b52d-4192-8ff3-987049d7d9b3',
+        is_obstacle: true
+      })
+    );
+
+    await repository.point.save(array.points);
+    await repository.parent.save(array.parents);
+    await repository.child.save(array.childs);
   }
 
   public static async associateUserOrganization() {

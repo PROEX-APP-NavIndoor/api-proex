@@ -1,6 +1,6 @@
 import { IMap } from './IMap.interface'
-import { IPoint } from './IPoint.interface'
+import { IPointParent } from './IPointParent.interface';
 
 export interface IMapResponse extends IMap{
-  points?: IPoint[];
+  points?: IPointParent[];
 }
