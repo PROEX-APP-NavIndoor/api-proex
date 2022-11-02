@@ -10,7 +10,8 @@ import { UserController } from './controllers/UserController';
 import { MapController } from './controllers/MapController';
 import { BuildingController } from './controllers/BuildingController';
 import { OrganizationController } from './controllers/OrganizationController';
-import { PointController } from './controllers/PointController';
+import { PointParentController } from './controllers/pointControllers/PointParentController';
+import { PointChildController } from './controllers/pointControllers/PointChildController';
 import { ForgotPasswordController } from './controllers/ForgotPasswordController';
 import { ChangePasswordController } from './controllers/ChangePasswordController';
 
@@ -21,7 +22,8 @@ const mapController = new MapController();
 const buildingController = new BuildingController();
 const organizationController = new OrganizationController();
 const authenticateUserController = new AuthenticateUserController();
-const pointController = new PointController();
+const pointParentController = new PointParentController();
+const pointChildController = new PointChildController();
 const forgotPasswordController = new ForgotPasswordController();
 const changePasswordControler = new ChangePasswordController();
 
@@ -58,11 +60,15 @@ router.delete(
   organizationController.delete,
 );
 
-router.post('/points', ensureAuthenticated, ensureSuper, pointController.create);
-router.get('/points', ensureAuthenticated, pointController.read);
-router.get('/points/:id', ensureAuthenticated, pointController.readById);
-router.put('/points/:id', ensureAuthenticated, ensureSuper, pointController.update);
-router.delete('/points/:id', ensureAuthenticated, ensureSuper, pointController.delete);
+//router.get('/points', ensureAuthenticated, pointParentController.read);
+//router.get('/points/:id', ensureAuthenticated, pointParentController.readById);
+router.post('/points/parent', ensureAuthenticated, ensureSuper, pointParentController.create);
+router.put('/points/parent/:id', ensureAuthenticated, ensureSuper, pointParentController.update);
+router.delete('/points/parent/:id', ensureAuthenticated, ensureSuper, pointParentController.delete);
+
+router.post('/points/child', ensureAuthenticated, ensureSuper, pointChildController.create);
+router.put('/points/child/:id', ensureAuthenticated, ensureSuper, pointChildController.update);
+router.delete('/points/child/:id', ensureAuthenticated, ensureSuper, pointChildController.delete);
 
 router.post('/login', authenticateUserController.handle);
 router.post('/forgot-password', forgotPasswordController.handle);

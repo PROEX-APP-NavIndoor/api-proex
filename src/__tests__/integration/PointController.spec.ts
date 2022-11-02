@@ -4,7 +4,7 @@ import { app } from '../../app';
 import createConnetion from '../../database';
 import { IPoint } from '../../interfaces/IPoint.interface';
 import { PointRepository } from '../../repositories/PointRepository';
-import { pointToData } from '../../services/PointService';
+import { pointToData } from '../../services/pointServices/PointParentService';
 import { yupConfig } from '../../validators/YupConfig'
 
 // ids de mapas cadastradas no seeders
