@@ -1,6 +1,7 @@
 import * as yup from 'yup';
+import { EnumTypePoint } from '../entities/PointParent';
 
-class PointValidator {
+class PointParentValidator {
   createValidation() {
     return yup.object().shape({
       name: yup.string().required(),
@@ -8,9 +9,11 @@ class PointValidator {
       floor: yup.number().required(),
       x: yup.number().required(),
       y: yup.number().required(),
-      breakPoint: yup.boolean().required(),
-      neighbor: yup.object().required(),
       map_id: yup.string().uuid().required(),
+      type: yup.mixed<keyof typeof EnumTypePoint>().oneOf(Object.values(EnumTypePoint)).required(),
+      neighbor: yup.array(
+        yup.object().required()
+      )
     });
   }
 
@@ -22,8 +25,10 @@ class PointValidator {
       floor: yup.number().optional(),
       x: yup.number().optional(),
       y: yup.number().optional(),
-      breakPoint: yup.boolean().optional(),
-      neighbor: yup.object().optional()
+      type: yup.mixed<keyof typeof EnumTypePoint>().oneOf(Object.values(EnumTypePoint)).optional(),
+      neighbor: yup.array(
+        yup.object().optional()
+      ).optional()
     });
   }
 
@@ -40,4 +45,4 @@ class PointValidator {
   }
 }
 
-export { PointValidator };
+export { PointParentValidator };

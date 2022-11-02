@@ -4,7 +4,5 @@ export interface IPoint {
   floor?: number;
   x?: number;
   y?: number;
-  breakPoint?: boolean;
-  neighbor?: Object;
   map_id?: string;
 }

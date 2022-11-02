@@ -4,11 +4,14 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Map } from './Map';
+import { PointChild } from './PointChild';
+import { PointParent } from './PointParent';
 
 @Entity('points')
 class Point {
@@ -30,12 +33,6 @@ class Point {
   @Column()
   floor: number;
 
-  @Column()
-  breakPoint: boolean;
-
-  @Column()
-  neighbor: string;
-
   @CreateDateColumn()
   created_at: Date;
 
@@ -48,6 +45,12 @@ class Point {
   @ManyToOne(() => Map, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })
   @JoinColumn({ name: 'map_id' })
   map: Map;
+
+  @OneToOne(() => PointParent, (point_parent) => point_parent.id)
+  parent: PointParent;
+
+  @OneToOne(() => PointChild, (point_child) => point_child.id)
+  child: PointChild;
 
   constructor() {
     if (!this.id) {
