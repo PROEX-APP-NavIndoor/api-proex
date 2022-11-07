@@ -15,9 +15,9 @@ import { v4 as uuid } from 'uuid';
 import { Organization } from './Organization';
 
 export enum EnumRoleUser {
-  SUPER = 'SUPER',
-  NORMAL = 'NORMAL',
-  EMPLOYEE = 'EMPLOYEE',
+  super = 'super',
+  normal = 'normal',
+  employee = 'employee',
 }
 
 @Entity('users')
@@ -34,7 +34,7 @@ class User {
   @Column()
   password: string;
 
-  @Column({ type: 'enum', enum: EnumRoleUser, default: EnumRoleUser.NORMAL })
+  @Column({ type: 'enum', enum: EnumRoleUser, default: EnumRoleUser.normal })
   role: EnumRoleUser;
 
   @CreateDateColumn()

@@ -27,7 +27,7 @@ export class createUser1629671206083 implements MigrationInterface {
           {
             name: 'role',
             type: 'enum',
-            enum: [EnumRoleUser.NORMAL, EnumRoleUser.EMPLOYEE, EnumRoleUser.SUPER],
+            enum: [EnumRoleUser.normal, EnumRoleUser.employee, EnumRoleUser.super],
           },
           {
             name: 'created_at',

@@ -9,9 +9,9 @@ export async function ensureNormal(request: Request, response: Response, next: N
 
   const user = await userService.readById(userId);
   if (
-    user.role === EnumRoleUser.NORMAL ||
-    user.role === EnumRoleUser.EMPLOYEE ||
-    user.role === EnumRoleUser.SUPER
+    user.role === EnumRoleUser.normal ||
+    user.role === EnumRoleUser.employee ||
+    user.role === EnumRoleUser.super
   ) {
     return next();
   }

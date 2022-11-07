@@ -31,7 +31,7 @@ class DataSeed {
         name: 'User 1',
         email: 'user1@gmail.com',
         password: '123456',
-        role: EnumRoleUser.SUPER,
+        role: EnumRoleUser.super,
       }),
     );
     arrayUsers.push(
@@ -40,7 +40,7 @@ class DataSeed {
         name: 'User 2',
         email: 'user2@gmail.com',
         password: '123456',
-        role: EnumRoleUser.NORMAL,
+        role: EnumRoleUser.normal,
       }),
     );
     arrayUsers.push(
@@ -49,7 +49,7 @@ class DataSeed {
         name: 'User 3',
         email: 'user3@gmail.com',
         password: '123456',
-        role: EnumRoleUser.NORMAL,
+        role: EnumRoleUser.normal,
       }),
     );
     arrayUsers.push(
@@ -58,7 +58,7 @@ class DataSeed {
         name: 'User 4',
         email: 'user4@gmail.com',
         password: '123456',
-        role: EnumRoleUser.EMPLOYEE,
+        role: EnumRoleUser.employee,
       }),
     );
 
@@ -251,7 +251,7 @@ class DataSeed {
     array.parents.push(
       repository.parent.create({
         id: '9fcbbe36-b52d-4192-8ff3-987049d7d9b3',
-        type: EnumTypePoint.COMMON,
+        type: EnumTypePoint.common,
         neighbor: JSON.stringify({
           left: "de845e22-8eaf-466b-a6c2-40821975b959"
         })
@@ -272,7 +272,7 @@ class DataSeed {
     array.parents.push(
       repository.parent.create({
         id: '02036a0b-f170-4bd8-bed5-4f7d4b69e1da',
-        type: EnumTypePoint.COMMON,
+        type: EnumTypePoint.common,
         neighbor: JSON.stringify({
           right: "9fcbbe36-b52d-4192-8ff3-987049d7d9b3"
         })
@@ -293,7 +293,7 @@ class DataSeed {
     array.parents.push(
       repository.parent.create({
         id: 'a241e031-6890-46ad-a150-0cfa642eabbb',
-        type: EnumTypePoint.COMMON,
+        type: EnumTypePoint.common,
         neighbor: JSON.stringify({
           bottom: "02036a0b-f170-4bd8-bed5-4f7d4b69e1da"
         })
@@ -314,7 +314,7 @@ class DataSeed {
     array.parents.push(
       repository.parent.create({
         id: '7673ae02-8c33-46a4-a7ea-14836259dbc0',
-        type: EnumTypePoint.COMMON,
+        type: EnumTypePoint.common,
         neighbor: JSON.stringify({
           bottom: "a241e031-6890-46ad-a150-0cfa642eabbb"
         })
@@ -398,7 +398,7 @@ class DataSeed {
       name: 'PROEX ADMIN',
       email: process.env.INIT_USER_EMAIL,
       password: process.env.INIT_USER_PASSWORD,
-      role: EnumRoleUser.SUPER,
+      role: EnumRoleUser.super,
       organization_id: 'ad8fb4ff-a518-42c0-af78-ac5062eaf53d',
     });
     await repository.save(user);

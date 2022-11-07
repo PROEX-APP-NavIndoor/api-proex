@@ -8,7 +8,7 @@ export async function ensureEmployee(request: Request, response: Response, next:
   const userService = new UserService();
 
   const user = await userService.readById(userId);
-  if (user.role === EnumRoleUser.EMPLOYEE || user.role === EnumRoleUser.SUPER) {
+  if (user.role === EnumRoleUser.employee || user.role === EnumRoleUser.super) {
     return next();
   }
 
