@@ -27,7 +27,7 @@ class UserController {
   }
 
   async readById(req: Request, resp: Response) {
-    const { id } = req.params;
+    const id = req.userId;
 
     const userValidator = new UserValidator();
     try {

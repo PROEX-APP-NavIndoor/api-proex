@@ -33,7 +33,7 @@ router.get('/', (req: Request, resp: Response) =>
 
 router.post('/users', ensureAuthenticated, ensureSuper, userController.create);
 router.get('/users', ensureAuthenticated, userController.read);
-router.get('/users/:id', ensureAuthenticated, userController.readById);
+router.get('/user', ensureAuthenticated, userController.readById);
 router.put('/users/:id', ensureAuthenticated, ensureSuper, userController.update);
 router.delete('/users/:id', ensureAuthenticated, ensureSuper, userController.delete);
 
