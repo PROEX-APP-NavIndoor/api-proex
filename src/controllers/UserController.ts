@@ -26,7 +26,7 @@ class UserController {
     return resp.json(allUsers);
   }
 
-  async readById(req: Request, resp: Response) {
+  async readByToken(req: Request, resp: Response) {
     const id = req.userId;
 
     const userValidator = new UserValidator();
