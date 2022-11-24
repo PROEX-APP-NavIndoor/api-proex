@@ -9,9 +9,9 @@ import { Point } from './Point';
 import { PointChild } from './PointChild';
 
 export enum EnumTypePoint {
-    COMMON = 'COMMON',
-    ENTRANCE = 'ENTRANCE',
-    PASSAGE = 'PASSAGE'
+    common = 'common',
+    entrance = 'entrance',
+    passage = 'passage'
 }
   
   @Entity('point_parents')
@@ -19,7 +19,7 @@ export enum EnumTypePoint {
     @PrimaryColumn('uuid')
     id: string;
 
-    @Column({ type: 'enum', enum: EnumTypePoint, default: EnumTypePoint.COMMON })
+    @Column({ type: 'enum', enum: EnumTypePoint, default: EnumTypePoint.common })
     type: EnumTypePoint
   
     @Column()

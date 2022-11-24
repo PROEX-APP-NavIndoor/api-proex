@@ -59,6 +59,7 @@ class MapService {
       .createQueryBuilder('point')
       .innerJoinAndMapOne('point.parent', PointParent, 'parent', 'point.id = parent.id')
       .where(`point.map_id = '${id}'`)
+      .orderBy('point.created_at', 'ASC')
       .getMany();
 
     const mapPointChilds = await this.connectPoint

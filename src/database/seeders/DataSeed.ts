@@ -31,7 +31,7 @@ class DataSeed {
         name: 'User 1',
         email: 'user1@gmail.com',
         password: '123456',
-        role: EnumRoleUser.SUPER,
+        role: EnumRoleUser.super,
       }),
     );
     arrayUsers.push(
@@ -40,7 +40,7 @@ class DataSeed {
         name: 'User 2',
         email: 'user2@gmail.com',
         password: '123456',
-        role: EnumRoleUser.NORMAL,
+        role: EnumRoleUser.normal,
       }),
     );
     arrayUsers.push(
@@ -49,7 +49,7 @@ class DataSeed {
         name: 'User 3',
         email: 'user3@gmail.com',
         password: '123456',
-        role: EnumRoleUser.NORMAL,
+        role: EnumRoleUser.normal,
       }),
     );
     arrayUsers.push(
@@ -58,7 +58,7 @@ class DataSeed {
         name: 'User 4',
         email: 'user4@gmail.com',
         password: '123456',
-        role: EnumRoleUser.EMPLOYEE,
+        role: EnumRoleUser.employee,
       }),
     );
 
@@ -251,10 +251,11 @@ class DataSeed {
     array.parents.push(
       repository.parent.create({
         id: '9fcbbe36-b52d-4192-8ff3-987049d7d9b3',
-        type: EnumTypePoint.COMMON,
-        neighbor: JSON.stringify({
-          left: "de845e22-8eaf-466b-a6c2-40821975b959"
-        })
+        type: EnumTypePoint.entrance,
+        neighbor: JSON.stringify([{
+          id: "02036a0b-f170-4bd8-bed5-4f7d4b69e1da",
+          direction: "n"
+        }])
       })
     );
 
@@ -263,8 +264,8 @@ class DataSeed {
         id: '02036a0b-f170-4bd8-bed5-4f7d4b69e1da',
         name: 'Ponto pai 2',
         description: 'Descrição do ponto pai 2',
-        x: 2.123,
-        y: -25.3347773,
+        x: 10.123,
+        y: 20.3347773,
         floor: 1,
         map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e'
       })
@@ -272,10 +273,17 @@ class DataSeed {
     array.parents.push(
       repository.parent.create({
         id: '02036a0b-f170-4bd8-bed5-4f7d4b69e1da',
-        type: EnumTypePoint.COMMON,
-        neighbor: JSON.stringify({
-          right: "9fcbbe36-b52d-4192-8ff3-987049d7d9b3"
-        })
+        type: EnumTypePoint.common,
+        neighbor: JSON.stringify([
+          {
+            id: "9fcbbe36-b52d-4192-8ff3-987049d7d9b3",
+            direction: "s"
+          },
+          {
+            id: "a241e031-6890-46ad-a150-0cfa642eabbb",
+            direction: "e"
+          }
+        ])
       })
     );
 
@@ -284,8 +292,8 @@ class DataSeed {
         id: 'a241e031-6890-46ad-a150-0cfa642eabbb',
         name: 'Ponto pai 3',
         description: 'Descrição do ponto pai 3',
-        x: 2.123,
-        y: 25.3347773,
+        x: 25.123,
+        y: 20.3347773,
         floor: 1,
         map_id: 'b30996e8-e87f-4ce7-aaa2-b76c9bb1cc1e'
       })
@@ -293,10 +301,17 @@ class DataSeed {
     array.parents.push(
       repository.parent.create({
         id: 'a241e031-6890-46ad-a150-0cfa642eabbb',
-        type: EnumTypePoint.COMMON,
-        neighbor: JSON.stringify({
-          bottom: "02036a0b-f170-4bd8-bed5-4f7d4b69e1da"
-        })
+        type: EnumTypePoint.common,
+        neighbor: JSON.stringify([
+          {
+            id: "02036a0b-f170-4bd8-bed5-4f7d4b69e1da",
+            direction: "w"
+          },
+          {
+            id: "7673ae02-8c33-46a4-a7ea-14836259dbc0",
+            direction: "s"
+          }
+        ])
       })
     );
 
@@ -314,10 +329,13 @@ class DataSeed {
     array.parents.push(
       repository.parent.create({
         id: '7673ae02-8c33-46a4-a7ea-14836259dbc0',
-        type: EnumTypePoint.COMMON,
-        neighbor: JSON.stringify({
-          bottom: "a241e031-6890-46ad-a150-0cfa642eabbb"
-        })
+        type: EnumTypePoint.common,
+        neighbor: JSON.stringify([
+          {
+            id: "a241e031-6890-46ad-a150-0cfa642eabbb",
+            direction: "n"
+          }
+        ])
       })
     );
 
@@ -398,7 +416,7 @@ class DataSeed {
       name: 'PROEX ADMIN',
       email: process.env.INIT_USER_EMAIL,
       password: process.env.INIT_USER_PASSWORD,
-      role: EnumRoleUser.SUPER,
+      role: EnumRoleUser.super,
       organization_id: 'ad8fb4ff-a518-42c0-af78-ac5062eaf53d',
     });
     await repository.save(user);

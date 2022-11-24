@@ -89,11 +89,10 @@ export class NewPointModelTables1666033578357 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        const queryBuilder = queryRunner.manager.createQueryBuilder();
-
-        queryRunner.query(`ALTER TABLE IF EXISTS public.points ADD COLUMN IF NOT EXISTS neighbor VARCHAR(255);`);
-        queryRunner.query(`ALTER TABLE IF EXISTS public.points ADD COLUMN IF NOT EXISTS "breakPoint" boolean DEFAULT false;`);
-        queryRunner.query(`
+        
+        await queryRunner.query(`ALTER TABLE IF EXISTS public.points ADD COLUMN IF NOT EXISTS neighbor VARCHAR(255);`);
+        await queryRunner.query(`ALTER TABLE IF EXISTS public.points ADD COLUMN IF NOT EXISTS "breakPoint" boolean DEFAULT false;`);
+        await queryRunner.query(`
             UPDATE points
             SET
                 neighbor = point_parents.neighbor

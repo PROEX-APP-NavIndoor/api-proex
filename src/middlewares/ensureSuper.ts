@@ -8,7 +8,7 @@ export async function ensureSuper(request: Request, response: Response, next: Ne
   const userService = new UserService();
 
   const user = await userService.readById(userId);
-  if (user.role === EnumRoleUser.SUPER) {
+  if (user.role === EnumRoleUser.super) {
     return next();
   }
 
