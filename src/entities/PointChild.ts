@@ -23,7 +23,7 @@ import { PointParent } from './PointParent';
     @OneToOne(() => Point, (point) => point.id)
     point: Point;
 
-    @ManyToOne(() => PointParent, { onUpdate: 'CASCADE', onDelete: 'CASCADE'})
+    @ManyToOne(() => PointParent, { onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     @JoinColumn({ name: 'point_parent_id' })
     point_parent: PointParent;
 
