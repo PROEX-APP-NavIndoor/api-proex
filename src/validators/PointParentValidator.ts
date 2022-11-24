@@ -12,8 +12,8 @@ class PointParentValidator {
       map_id: yup.string().uuid().required(),
       type: yup.mixed<keyof typeof EnumTypePoint>().oneOf(Object.values(EnumTypePoint)).required(),
       neighbor: yup.array(
-        yup.object().required()
-      )
+        yup.object().optional()
+      ).required()
     });
   }
 

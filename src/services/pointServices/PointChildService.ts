@@ -90,7 +90,7 @@ class PointChildService {
     try {
       await this.connectPoint.updatePoint(queryRunner.manager, data, point.id);
       await this.connectPointChild.updatePointChild(queryRunner.manager, data, point.id);
-
+      await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw new ApiError(500, err.message);
